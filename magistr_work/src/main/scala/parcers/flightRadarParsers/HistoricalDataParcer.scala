@@ -54,14 +54,15 @@ object HistoricalDataParcer {
 
     var countruOrigin, countruDest, cityOrigin, cityDest = ""
 
-    if (FIFTHDataTMP_1.size == 2) {
-      val countruOrigin = FIFTHDataTMP_1(0)
-      val countruDest = FIFTHDataTMP_1(1)
+    //    println(FIFTHDataTMP_1.length)
+    if (FIFTHDataTMP_1.length == 2) {
+      countruOrigin = FIFTHDataTMP_1(0)
+      countruDest = FIFTHDataTMP_1(1)
     }
 
-    if (FIFTHDataTMP_1.size == 2) {
-      val cityOrigin = FIFTHDataTMP_2(0)
-      val cityDest = FIFTHDataTMP_2(1)
+    if (FIFTHDataTMP_1.length == 2) {
+      cityOrigin = FIFTHDataTMP_2(0)
+      cityDest = FIFTHDataTMP_2(1)
     }
 
 
@@ -81,15 +82,13 @@ object HistoricalDataParcer {
     document.append("countruOrigin", historical.countruOrigin)
     document.append("cityDest", historical.cityDest)
     document.append("cityOrigin", historical.cityOrigin)
-    document.append("timeData", TimeDataTOBasicDBObject(historical.timeData))
+    PopulateDbObjectByTimeData(historical.timeData, document)
     document.append("traectory", TraectoryArrayTOBasicDBObject(historical.traectory))
 
     document
   }
 
-  def TimeDataTOBasicDBObject(timedata: TimeData): BasicDBObject = {
-    val document = new BasicDBObject
-
+  def PopulateDbObjectByTimeData(timedata: TimeData, document: BasicDBObject): Unit = {
     document.append("scheduledDeparture", timedata.scheduledDeparture)
     document.append("scheduledArrival", timedata.scheduledArrival)
     document.append("realDeparture", timedata.realDeparture)
@@ -100,8 +99,6 @@ object HistoricalDataParcer {
     document.append("otherUpdated", timedata.otherUpdated)
     document.append("historicalFlighttime", timedata.historicalFlighttime)
     document.append("historicalDelay", timedata.historicalDelay)
-
-    document
   }
 
   def TraectoryArrayTOBasicDBObject(timedata: Array[Traectory]): BasicDBList = {
