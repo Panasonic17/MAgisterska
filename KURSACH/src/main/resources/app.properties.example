@@ -1,0 +1,3 @@
+hive_metastore_uris=thrift://hdp-node-2.c.my-custom-project-198208.internal:9083
+file_hdfs_path=/crime-output/
+location_for_hive_external_table=/user/admin/hiveTables/notArrestedCrimes
