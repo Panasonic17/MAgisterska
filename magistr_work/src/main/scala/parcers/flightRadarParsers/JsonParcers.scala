@@ -1,6 +1,6 @@
 package parcers.flightRadarParsers
 
-import entity.{FlightRadarRecord, FullHistoracalData, ValuableRealtimeDataMongo}
+import entity.{FlightRadarRecord, ValuableRealtimeDataMongo}
 
 object JsonParcers {
   def flightRadarRecordtoJson(record: FlightRadarRecord): String = {
@@ -13,10 +13,6 @@ object JsonParcers {
     var str =
       s"""{"flightGlobalID":"${record.flightGlobalID}","REGISTRATION":"${record.REGISTRATION}","timestamp":"${record.timestamp}","from_City":"${record.from_City}" ,"to_City": "${record.to_City}"}"""
     return str
-  }
-
-  def jsonToFullHistoracalData(json: String): FullHistoracalData = {
-    ???
   }
 
 }

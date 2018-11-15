@@ -4,10 +4,12 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
+import entity.Historical;
+import parcers.flightRadarParsers.HistoricalDataParcer;
 import recivers.GetHistoricalData;
 import settings.Constants;
 
-public class Historical {
+public class HistoricalPopulator {
 
     public static void main(String[] args) throws InterruptedException {
         MongoClient mongoClient = new MongoClient("localhost", 27017);
@@ -16,17 +18,28 @@ public class Historical {
 
         DBCollection output = database.createCollection(Constants.MONGO_HISTORICAL_DATA_SCHEMA(), null);
 
+        while (true)
+            populateOneReccord(input, output);
+    }
+
+    public static void populateOneReccord(DBCollection input, DBCollection output) {
+// load data
         String globalID = input.findOne().get("flightGlobalID").toString();
+
         String data = GetHistoricalData.getHistoricalFlightDataByFlightID(globalID);
-        System.out.println(data);
-        System.out.println(globalID);
-        Thread.sleep(1000 * 60);
+        System.out.println("data " + data);
+        System.out.println("id" + globalID);
+        Historical historicalData = HistoricalDataParcer.getHistoricalData(data);
+        System.out.println("class" + historicalData);
+        BasicDBObject outputObject = HistoricalDataParcer.HistoricalDataToBasicDBObject(historicalData);
+//save data f8cd6
+        System.out.println(output.insert(outputObject));
+        // remove flight from tmp storage
         BasicDBObject document = new BasicDBObject();
         document.put("flightGlobalID", globalID);
-
         input.remove(document);
-
-//        System.out.println(input.findOne());
     }
+
+    // tmp test
 
 }
