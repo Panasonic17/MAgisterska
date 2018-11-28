@@ -11,7 +11,7 @@ object JsonParcers {
 
   def valuableRealtimeDataMongoToJson(record: ValuableRealtimeDataMongo): String = {
     var str =
-      s"""{"flightGlobalID":"${record.flightGlobalID}","REGISTRATION":"${record.REGISTRATION}","timestamp":"${record.timestamp}","from_City":"${record.from_City}" ,"to_City": "${record.to_City}"}"""
+      s"""{"flightGlobalID":"${record.flightGlobalID}","REGISTRATION":"${record.REGISTRATION}","timestamp":${record.timestamp},"from_City":"${record.from_City}" ,"to_City": "${record.to_City}"}"""
     return str
   }
 

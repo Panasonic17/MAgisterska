@@ -41,4 +41,8 @@ case class TimeData(scheduledDeparture: Long, scheduledArrival: Long, realDepart
 
 case class Traectory(lat: Double, lng: Double, alt: String, spd: Int, ts: Long, hd: Long)
 
-case class Historical(id: String, callsign: String, aircraftModelCode: String, countruDest: String, countruOrigin: String, cityDest: String, cityOrigin: String, timeData: TimeData, traectory: Array[Traectory])
+case class Historical(id: String, callsign: String, aircraftModelCode: String, countruDest: String, countruOrigin: String, cityDest: String, cityOrigin: String, timeData: TimeData, traectory: Array[Traectory], iataOrigin: String, iataDest: String)
+
+case class MLHistoracal(aircraftModelCode: String, iataOrigin: String, iataDest: String, traectory: Array[MLTraectory],scheduledDeparture: Int, scheduledArrival: Int, realDeparture: Int, realArrival: Int)
+
+case class MLTraectory(lat: Double, lng: Double, spd: Int, ts: Int)

@@ -8,7 +8,7 @@ class GetSimplePlainsArray {
     //    //   val url_1=/
     val data: HttpResponse[String] = Http(url).asString
     //
-
+//println(data)
     val arr = data.body.split("\n")
     return arr
   }
