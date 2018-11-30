@@ -21,7 +21,7 @@ object MLParcer {
     document.append("aircraftModelCode", historical.aircraftModelCode)
     document.append("iataOrigin", historical.iataOrigin)
     document.append("iataDest", historical.iataDest)
-    document.append("traectory", MLTraectoryArrayTOBasicDBObject(historical.traectory))
+    document.append("traectory", mLTraectoryArrayTOBasicDBObject(historical.traectory))
     document.append("scheduledArrival", historical.scheduledArrival)
     document.append("scheduledDeparture", historical.scheduledDeparture)
     document.append("realDeparture", historical.realDeparture)
@@ -30,18 +30,32 @@ object MLParcer {
     document
   }
 
-  def MLTraectoryArrayTOBasicDBObject(timedata: Array[MLTraectory]): BasicDBList = {
+  def mLTraectoryArrayTOBasicDBObject(timedata: Array[MLTraectory]): BasicDBList = {
     val global = new BasicDBList
-    timedata.map(TraectoryTOBasicDBObject).foreach(t => global.add(t))
+    timedata.map(traectoryTOBasicDBObject).foreach(t => global.add(t))
     global
   }
 
-  def TraectoryTOBasicDBObject(traectory: MLTraectory): BasicDBObject = {
+  def traectoryTOBasicDBObject(traectory: MLTraectory): BasicDBObject = {
     val t = new BasicDBObject
     t.append("lat", traectory.lat)
     t.append("lng", traectory.lng)
     t.append("spd", traectory.spd)
     t.append("ts", traectory.ts)
     t
+  }
+
+  def goggleCloudStrToMLHistoracal(string: String): MLHistoracal = {
+    val data = string.replace("Lentity.MLTraectory;@", "bla bla bla") split ("MLHistoracal|MLTraectory")
+    val rawMLHistoracal: Array[String] = data(1).replace("(", "").replace(")", "").split(",")
+    val arrTreactory = data.tail.tail.map(getMLTraectoryFromStrGooleCloud)
+
+    MLHistoracal(rawMLHistoracal(0), rawMLHistoracal(1), rawMLHistoracal(2), arrTreactory, rawMLHistoracal(4).toInt, rawMLHistoracal(5).toInt, rawMLHistoracal(6).toInt, rawMLHistoracal(7).trim.toInt)
+  }
+
+  def getMLTraectoryFromStrGooleCloud(string: String): MLTraectory = {
+    val data = string.replace("(", "").replace(")", "").split(",")
+
+    MLTraectory(data(0).toDouble, data(1).toDouble, data(2).toInt, data(3).toInt)
   }
 }

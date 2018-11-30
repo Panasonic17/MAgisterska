@@ -8,7 +8,7 @@ import recivers.GetHistoricalData
 import util.Utils
 
 import scala.io.Source
-//java -cp magistr-1.0-SNAPSHOT-jar-with-dependencies.jar realtimeAbuse.App /tmp/start /tmp/outF
+//nohup  java -cp magistr-1.0-SNAPSHOT-jar-with-dependencies.jar realtimeAbuse.App start files 5
 //514520126
 object App {
   def main(args: Array[String]): Unit = {
