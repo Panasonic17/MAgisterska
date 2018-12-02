@@ -11,7 +11,6 @@ object Main {
       .builder
       .master("local[8]")
       .config("spark.mongodb.input.uri", s"mongodb://127.0.0.1/${MONGO_DATABACE}.${MONGO_HISTORICAL_DATA_SCHEMA}")
-      .config("spark.mongodb.output.uri", s"mongodb://127.0.0.1/${MONGO_DATABACE}.${MONGO_HISTORICAL_DATA_SCHEMA}")
       .appName("StructuredNetworkWordCount")
       .getOrCreate()
 

@@ -8,29 +8,31 @@ import recivers.GetHistoricalData
 import util.Utils
 
 import scala.io.Source
-//nohup  java -cp magistr-1.0-SNAPSHOT-jar-with-dependencies.jar realtimeAbuse.App start files 5
-//514520126
+
+//nohup  java -cp magistr-1.0-SNAPSHOT-jar-with-dependencies.jar realtimeAbuse.App 514660001 newfiles 10
+
+//
 object App {
   def main(args: Array[String]): Unit = {
 
-    val globalIDPAth = args(0)
     val outputFolder = args(1)
     val step = args(2).toInt
-    val lines = Source.fromFile(globalIDPAth).getLines.toArray
-    var globalStartID = lines(0).toInt
+    var globalStartID = args(0).toInt
 
     println(globalStartID)
 
     var filewriter = getBuferedWriter(outputFolder, globalStartID.toString)
+    var fullfilewriter = getBuferedWriter(outputFolder, "FULL" + globalStartID.toString)
     val keyWriter = getBuferedWriter(outputFolder, "KEYS")
     var iteration = 0
     while (true) {
       iteration += 1
       globalStartID += step
-      Thread.sleep(5 * 1000)
+      Thread.sleep(4*1000)
       try {
         val data: String = GetHistoricalData.getHistoricalFlightDataByFlightID(Integer.toHexString(globalStartID))
-        println(data)
+        fullfilewriter.write(data+ "\n")
+//        println(data)
         var historicalData: Historical = null
         historicalData = HistoricalDataParcer.getHistoricalData(data)
         if (Utils.isFullHistoracal(historicalData)) {
@@ -51,12 +53,14 @@ object App {
           keyWriter.write(globalStartID)
           keyWriter.flush()
           filewriter = getBuferedWriter(outputFolder, globalStartID.toString)
+          fullfilewriter = getBuferedWriter(outputFolder, "FULL" + globalStartID.toString)
           iteration = 0
         }
 
       }
       catch {
-        case e: Exception => e.printStackTrace()
+        case e: Exception => print()//e.printStackTrace()
+
       }
     }
   }

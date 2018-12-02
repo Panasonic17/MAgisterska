@@ -13,6 +13,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <scala.version>2.11</scala.version>
         <spark.version>2.3.1</spark.version>
+        <scope>compile</scope>
     </properties>
 
     <parent>
@@ -20,7 +21,7 @@
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.0.5.RELEASE</version>
     </parent>
-    
+
     <dependencies>
 
         <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-csv -->
@@ -28,7 +29,6 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-csv</artifactId>
             <version>1.6</version>
-
         </dependency>
 
 
@@ -95,7 +95,6 @@
             <groupId>org.mongodb.scala</groupId>
             <artifactId>mongo-scala-driver_${scala.version}</artifactId>
             <version>2.4.2</version>
-            <scope>provided</scope>
 
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.mongodb.scala/mongo-scala-bson -->
@@ -104,6 +103,7 @@
             <artifactId>mongo-scala-bson_${scala.version}</artifactId>
             <version>2.4.2</version>
 
+            <scope>${scala.version}</scope>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.mongodb.spark/mongo-spark-connector -->
@@ -111,6 +111,8 @@
             <groupId>org.mongodb.spark</groupId>
             <artifactId>mongo-spark-connector_${scala.version}</artifactId>
             <version>2.2.4</version>
+            <scope>${scala.version}</scope>
+
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.mongodb/casbah-core -->
 
@@ -121,6 +123,7 @@
             <groupId>io.spray</groupId>
             <artifactId>spray-json_2.11</artifactId>
             <version>1.3.5</version>
+            <scope>${scala.version}</scope>
 
         </dependency>
 
@@ -129,12 +132,14 @@
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
             <version>2.11.3</version>
+
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.plotly-scala/plotly-core -->
         <dependency>
             <groupId>org.plotly-scala</groupId>
             <artifactId>plotly-core_2.11</artifactId>
             <version>0.5.1</version>
+            <scope>${scala.version}</scope>
 
         </dependency>
 
@@ -143,6 +148,7 @@
             <groupId>jfree</groupId>
             <artifactId>jfreechart</artifactId>
             <version>1.0.13</version>
+            <scope>${scala.version}</scope>
 
         </dependency>
 
