@@ -62,10 +62,19 @@ object Utils {
     dist
   }
 
-  def createBarChart(data: Array[Tuple2[Long, String]], name: String) = {
+  def createBarChart(data: Array[Tuple2[Number, String]], name: String) = {
     val dataset = new DefaultCategoryDataset
 
-    data.foreach(data => dataset.addValue(data._1, data._2, "name"))
+    var i = 0
+    var poh:Double = 0
+    data.foreach(data => {
+      i += 1; poh += data._1.doubleValue()
+
+    })
+
+    println("POHYBKA "+ poh)
+
+    data.foreach(data => dataset.addValue(data._1, data._2, name))
     val barChart = ChartFactory.createBarChart("CAR USAGE STATIStICS", "Category", "Score", dataset, PlotOrientation.VERTICAL, true, true, false)
 
     val width = 640
