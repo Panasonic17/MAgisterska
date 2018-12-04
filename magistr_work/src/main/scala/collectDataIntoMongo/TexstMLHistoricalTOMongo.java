@@ -17,7 +17,7 @@ public class TexstMLHistoricalTOMongo {
 
         DBCollection output = database.createCollection(Constants.MONGO_HISTORICAL_DATA_SCHEMA(), null);
 
-        File folder = new File("your/path");
+        File folder = new File("C:\\WORK_DIR\\magistra\\MAgisterska\\Data\\googleCloud");
         File[] listOfFiles = folder.listFiles();
 
         for (int i = 0; i < listOfFiles.length; i++) {

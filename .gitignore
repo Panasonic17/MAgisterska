@@ -13,3 +13,5 @@ KURSACH/program/.idea/
 KURSACH/program/streaming/target/classes/app/AppProperties$.class
 KURSACH/program/streaming/target/
 KURSACH/target/
+*.iml
+*.jpeg

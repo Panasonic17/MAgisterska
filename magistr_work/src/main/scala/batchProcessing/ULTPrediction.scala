@@ -35,16 +35,13 @@ object ULTPrediction {
       .orderBy("col.ts")
           .cache()
     //
-    //    visualizate(preparedData.withColumn("predictedFlightTime", $"realDistance" / ($"col.spd" * 1000 / 3600)), "noaceleration") //seconds
+        visualizate(preparedData.withColumn("predictedFlightTime", $"realDistance" / ($"col.spd" * 1000 / 3600)), "noaceleration") //seconds
 
-
+    println(preparedData.count())
+    aceleratedwithLag(preparedData,1)
+    aceleratedwithLag(preparedData,10)
 
     aceleratedwithAVGLag(preparedData, 5)
-    aceleratedwithAVGLag(preparedData, 7)
-    aceleratedwithAVGLag(preparedData, 9)
-    aceleratedwithAVGLag(preparedData, 10)
-    aceleratedwithAVGLag(preparedData, 30)
-    aceleratedwithAVGLag(preparedData, 100)
     //    aceleratedwithAVGLag(preparedData.limit(10), 1)
     // mp into another function and optimization
 

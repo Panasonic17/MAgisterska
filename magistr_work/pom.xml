@@ -37,7 +37,6 @@
             <groupId>org.scalaj</groupId>
             <artifactId>scalaj-http_${scala.version}</artifactId>
             <version>2.4.1</version>
-
         </dependency>
 
         <!--spark-->
@@ -45,20 +44,27 @@
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-core_${scala.version}</artifactId>
             <version>${spark.version}</version>
-
         </dependency>
+
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-sql_${scala.version}</artifactId>
             <version>${spark.version}</version>
-
         </dependency>
+
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-streaming_${scala.version}</artifactId>
             <version>${spark.version}</version>
-
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.apache.spark/spark-mllib -->
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-mllib_${scala.version}</artifactId>
+            <version>${spark.version}</version>
+        </dependency>
+
 
         <dependency>
             <groupId>org.elasticsearch</groupId>
@@ -131,7 +137,7 @@
         <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
-            <version>2.11.3</version>
+            <version>${scala.version}</version>
 
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.plotly-scala/plotly-core -->

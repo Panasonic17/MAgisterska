@@ -3,11 +3,14 @@ package batchProcessing
 import java.io.File
 
 import entity.Historical
+import org.apache.spark.sql.expressions.UserDefinedFunction
+import org.apache.spark.sql.functions.{concat, udf}
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.jfree.chart.plot.PlotOrientation
 import org.jfree.chart.{ChartFactory, ChartUtilities}
 import org.jfree.data.category.DefaultCategoryDataset
 import settings.Constants.{MONGO_DATABACE, MONGO_HISTORICAL_DATA_SCHEMA}
+import test.getDATAFRAME.schema
 
 object Utils {
 
@@ -22,7 +25,7 @@ object Utils {
     val x1 = (-b + Math.sqrt(b * b - 4 * a * c)) / (2 * a)
     val x2 = (-b - Math.sqrt(b * b - 4 * a * c)) / (2 * a)
 
-    if ((x1 < 0 && x2 < 0) ||x1.isNaN||x2.isNaN) return L / U
+    if ((x1 < 0 && x2 < 0) || x1.isNaN || x2.isNaN) return L / U
     if (x1 > 0 && x2 < 0) return x1
     if (x1 < 0 && x2 > 0) return x2
 
@@ -31,7 +34,7 @@ object Utils {
   }
 
   def getAiroportsInfo(spark: SparkSession): DataFrame = {
-    spark.read.csv("/home/sawa/MAGISTRA_WORK/Data/airports.dat")
+    spark.read.csv("C:\\WORK_DIR\\magistra\\MAgisterska\\Data\\airports.dat")
       .withColumnRenamed("_c2", "City")
       .withColumnRenamed("_c3", "Country")
       .withColumnRenamed("_c4", "iata")
@@ -171,5 +174,30 @@ object Utils {
     /* Height of the image */
     val BarChart = new File(name + ".jpeg")
     ChartUtilities.saveChartAsJPEG(BarChart, barChart, width, height)
+  }
+
+  def gowDataToHistorical(df: DataFrame): DataFrame = {
+    val ret = df.withColumnRenamed("ORIGIN", "iataOrigin")
+      .withColumnRenamed("DEST", "iataDest")
+
+    ret
+  }
+
+  def gowTOClasificationExample(df1: DataFrame): DataFrame = {
+    import org.apache.spark.sql.expressions.UserDefinedFunction
+    import org.apache.spark.sql.functions.{udf, _}
+    import org.apache.spark.sql.types._
+    import org.apache.spark.sql.{DataFrame, SparkSession}
+    val spark = df1.sparkSession
+    val df2 = df1.na.drop
+    val toDouble: UserDefinedFunction = udf { s: Integer => (s / 100.0).round }
+    val df = df2.withColumn("crsdephour", toDouble(df2("CRS_DEP_TIME")))
+    import spark.implicits._
+    df.createOrReplaceTempView("flights")
+    val dfd = spark.sql("select DAY_OF_MONTH as dofM, DAY_OF_WEEK as dofW, OP_UNIQUE_CARRIER as carrier,FL_DATE as fldate , OP_CARRIER_FL_NUM as flnum, ORIGIN as origin, DEST as dest,crsdephour as crsdephour, CRS_DEP_TIME  as crsdeptime, DEP_DELAY_NEW as depdelay, CRS_ARR_TIME as crsarrtime ,ARR_DELAY_NEW as arrdelay, CRS_ELAPSED_TIME as crselapsedtime , DISTANCE as dist   from flights")
+
+    dfd.createOrReplaceTempView("flights1")
+    val df21 = dfd.withColumn("_id", concat($"carrier", $"fldate", $"origin", $"dest", $"flnum"))
+    df21
   }
 }

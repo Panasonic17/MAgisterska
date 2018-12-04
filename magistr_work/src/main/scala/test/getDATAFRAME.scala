@@ -12,7 +12,7 @@ object getDATAFRAME {
   val schema = StructType(Array(StructField("DAY_OF_MONTH", IntegerType, true),
     StructField("DAY_OF_WEEK", IntegerType, true),
     StructField("FL_DATE", DateType, true),
-    StructField("CARRIER", StringType, true),
+    StructField("OP_UNIQUE_CARRIER", StringType, true),
     StructField("OP_CARRIER_FL_NUM", StringType, true),
     StructField("ORIGIN", StringType, true),
     StructField("DEST", StringType, true),
@@ -34,7 +34,7 @@ object getDATAFRAME {
     val df = df2.withColumn("crsdephour", toDouble(df2("CRS_DEP_TIME")))
     import spark.implicits._
     df.createOrReplaceTempView("flights")
-    val dfd = spark.sql("select DAY_OF_MONTH as dofM, DAY_OF_WEEK as dofW, CARRIER as carrier,FL_DATE as fldate , OP_CARRIER_FL_NUM as flnum, ORIGIN as origin, DEST as dest,crsdephour as crsdephour, CRS_DEP_TIME  as crsdeptime, DEP_DELAY_NEW as depdelay, CRS_ARR_TIME as crsarrtime ,ARR_DELAY_NEW as arrdelay, CRS_ELAPSED_TIME as crselapsedtime , DISTANCE as dist   from flights")
+    val dfd = spark.sql("select DAY_OF_MONTH as dofM, DAY_OF_WEEK as dofW, OP_UNIQUE_CARRIER as carrier,FL_DATE as fldate , OP_CARRIER_FL_NUM as flnum, ORIGIN as origin, DEST as dest,crsdephour as crsdephour, CRS_DEP_TIME  as crsdeptime, DEP_DELAY_NEW as depdelay, CRS_ARR_TIME as crsarrtime ,ARR_DELAY_NEW as arrdelay, CRS_ELAPSED_TIME as crselapsedtime , DISTANCE as dist   from flights")
 
 
     dfd.createOrReplaceTempView("flights1")

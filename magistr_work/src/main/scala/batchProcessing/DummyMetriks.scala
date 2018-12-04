@@ -11,7 +11,7 @@ object DummyMetriks {
 
     val data = MongoSpark.load(spark).toDF
 
-    val dechipherIATA = Utils.dehipherIATA(spark, data).cache()
+    val dechipherIATA = Utils.dehipherIATA(data).cache()
 
 
     val a = dechipherIATA.groupBy("originCountry").count().orderBy(desc("count")).limit(10)
@@ -27,11 +27,11 @@ object DummyMetriks {
     Utils.visualiseDFToBAR(10, d, 1, 0, "destCountry")
 
 
-    val e = dechipherIATA.withColumn("city->city",concat($"originCity",$"destCity")).groupBy("city->city").count().orderBy(desc("count")).limit(10)
-    Utils.visualiseDFToBAR(10, e, 1, 0, "city -> city")
+    val e = dechipherIATA.withColumn("citycity",concat($"originCity",$"destCity")).groupBy("citycity").count().orderBy(desc("count")).limit(10)
+    Utils.visualiseDFToBAR(10, e, 1, 0, "citycity")
 
-    val f = dechipherIATA.withColumn("country->country",concat($"originCountry",$"destCountry")).groupBy("country->country").count().orderBy(desc("count")).limit(10)
-    Utils.visualiseDFToBAR(10, f, 1, 0, "country -> country")
+    val f = dechipherIATA.withColumn("countrycountry",concat($"originCountry",$"destCountry")).groupBy("countrycountry").count().orderBy(desc("count")).limit(10)
+    Utils.visualiseDFToBAR(10, f, 1, 0, "countrycountry")
 
   }
 
