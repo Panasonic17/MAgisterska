@@ -25,22 +25,22 @@ object Clasification {
 
     import org.apache.spark.mllib.stat.Statistics
 
-//    val depdelay = df.select("depdelay").map { row: Row => row.getAs[Double]("depdelay") }.rdd
-//    val arrdelay = df.select("arrdelay").map { row: Row => row.getAs[Double]("arrdelay") }.rdd
-//    val correlation = Statistics.corr(depdelay, arrdelay, "pearson")
+    //    val depdelay = df.select("depdelay").map { row: Row => row.getAs[Double]("depdelay") }.rdd
+    //    val arrdelay = df.select("arrdelay").map { row: Row => row.getAs[Double]("arrdelay") }.rdd
+    //    val correlation = Statistics.corr(depdelay, arrdelay, "pearson")
 
     val delaybucketizer = new Bucketizer().setInputCol("depdelay")
       .setOutputCol("delayed").setSplits(Array(0.0, 40.0, Double.PositiveInfinity))
     val df4 = delaybucketizer.transform(df)
 
-//    df4.groupBy("delayed").count.show
+    //    df4.groupBy("delayed").count.show
 
 
-//    println(df4.count())
-//    println(df4.select($"depdelay" > 1).count())
-//    val dft = delaybucketizer.transform(test)
-//    dft.groupBy("delayed").count.show
-//    df4.createOrReplaceTempView("flight4")
+    //    println(df4.count())
+    //    println(df4.select($"depdelay" > 1).count())
+    //    val dft = delaybucketizer.transform(test)
+    //    dft.groupBy("delayed").count.show
+    //    df4.createOrReplaceTempView("flight4")
 
     val fractions = Map(0.0 -> .29, 1.0 -> 1.0)
     val strain = df4.stat.sampleBy("delayed", fractions, 36L)
@@ -63,7 +63,7 @@ object Clasification {
         .setInputCol(colName + "Indexed")
         .setOutputCol(colName + "Enc")
     }
-//    encoders.foreach(enc=>println(enc.inputCol+ " ",enc.outputCol))
+    //    encoders.foreach(enc=>println(enc.inputCol+ " ",enc.outputCol))
 
     //bucket the dataset into delayed and not delayed flights with a label 0/1 column
     val labeler = new Bucketizer().setInputCol("depdelay")
@@ -81,7 +81,20 @@ object Clasification {
       .setMaxBins(7000)
 
     val steps: Array[PipelineStage with MLWritable] = stringIndexers ++ encoders ++ Array(labeler, assembler, dTree)
-//    val steps = stringIndexers ++ Array(labeler, assembler, dTree)
+
+
+    val dummysteps = stringIndexers //++ encoders ++ Array(labeler, assembler)
+
+    val dummyPipeline = new Pipeline().setStages(dummysteps)
+
+    val dummysteps1 = stringIndexers ++ encoders ++ Array(labeler, assembler)
+
+    val dummyPipeline1 = new Pipeline().setStages(dummysteps1)
+
+    println("encoded")
+    dummyPipeline.fit(df).transform(df).show(truncate =false)
+    dummyPipeline1.fit(df).transform(df).show(truncate =false)
+    //    val steps = stringIndexers ++ Array(labeler, assembler, dTree)
     val pipeline = new Pipeline().setStages(steps)
 
 
@@ -112,12 +125,12 @@ object Clasification {
     println(treeModel.toDebugString) // note OneHotEncoding increased the number of features
 
 
-    val featureImpotances=treeModel.featureImportances
+    val featureImpotances = treeModel.featureImportances
 
-//    val fis= s"features import:\n ${featureCols.zip(featureImpotances).map(t=>s"\t${t._1}=${t._2}").mkString("\n")}\n"
+    //    val fis= s"features import:\n ${featureCols.zip(featureImpotances).map(t=>s"\t${t._1}=${t._2}").mkString("\n")}\n"
 
-//    println(fis)
-//    val fis =featureCols.zip(featuressss).foreach(t=>println(t._1+"="+t._2))
+    //    println(fis)
+    //    val fis =featureCols.zip(featuressss).foreach(t=>println(t._1+"="+t._2))
 
     val predictions = cvModel.transform(test)
 
