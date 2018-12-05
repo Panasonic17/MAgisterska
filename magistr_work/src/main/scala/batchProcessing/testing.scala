@@ -6,16 +6,28 @@ import org.apache.spark.sql.{DataFrame, SparkSession}
 object testing {
 
   def main(args: Array[String]): Unit = {
-    val spark: SparkSession = Utils.getSparkSeesion()
-    import spark.implicits._
+    val spark = Utils.getSparkSeesion()
+    import org.apache.spark.ml.fpm.FPGrowth
+import spark.implicits._
+    val dataset = spark.createDataset(Seq(
+      "a b c",
+      "a b c d",
+      "a b")
+    ).map(t => t.split(" ")).toDF("items")
 
-    val data = MongoSpark.load(spark).toDF
+    dataset.show()
+    val fpgrowth = new FPGrowth().setItemsCol("items").setMinSupport(0.5).setMinConfidence(0.6)
+    val model = fpgrowth.fit(dataset)
 
-    val mlNormal: DataFrame = Regression.getValidHistoricalReggersionRecords(data).withColumn("delay", $"realArrival" - $"scheduledArrival")
+    // Display frequent itemsets.
+    model.freqItemsets.show()
 
-    val airoportsInfo = Utils.getAiroportsInfo(spark)
+    // Display generated association rules.
+    model.associationRules.show()
 
-    dehipherIATA(spark,mlNormal).show()
+    // transform examines the input items against all the association rules and summarize the
+    // consequents as prediction
+    model.transform(dataset).show()
   }
 
   def dehipherIATA(spark: SparkSession, df: DataFrame): DataFrame = {
